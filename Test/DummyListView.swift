@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import Kingfisher
+import SDWebImageSwiftUI
 
 struct Place: Identifiable {
     let id: String = UUID().uuidString
-    let image: String = "https://picsum.photos/400"
+    let image: String = randomImage()
 }
 
 
@@ -20,13 +22,15 @@ struct DummyListView: View {
         NavigationStack {
             VStack {
                 List(arrPlaces) { place in
-                    listCell(place: place)
-                        .onAppear {
-                            paginate(place: place)
-                        }
-                        .listRowSeparator(.hidden)
-                        .listStyle(.plain)
+                    Group {
+                        listCell(place: place)
+                            .onAppear {
+                                paginate(place: place)
+                            }
+                    }
+                    .listRowSeparator(.hidden)
                 }
+                .listStyle(.plain)
             }
             .onAppear {
                 addElements()
@@ -51,12 +55,12 @@ struct DummyListView: View {
         print(arrPlaces.count)
     }
     
-    func imageCarousel(place: Place) -> some View {
+    func imageCarousel() -> some View {
         TabView {
-            imageView(image: place.image)
-            imageView(image: place.image)
-            imageView(image: place.image)
-            imageView(image: place.image)
+            imageView(image: randomImage())
+            imageView(image: randomImage())
+            imageView(image: randomImage())
+            imageView(image: randomImage())
         }
         .tabViewStyle(.page)
         .frame(height: 250)
@@ -64,11 +68,33 @@ struct DummyListView: View {
     
     @ViewBuilder
     func listCell(place: Place) -> some View {
-           imageCarousel(place: place)
+           imageCarousel()
     }
     
     @ViewBuilder
     func imageView(image: String) -> some View {
+        
+//        WebImage(url: URL(string: image)) { image in
+//                image.resizable()
+//                .aspectRatio(contentMode: .fill)
+//            } placeholder: {
+//                    Rectangle().foregroundColor(.gray)
+//            }
+//            .indicator(.activity) // Activity Indicator
+//            .transition(.fade(duration: 0.5)) // Fade Transition with duration
+//            .scaledToFit()
+//            .frame(width: 350, height: 250)
+//            .clipped()
+        
+//        KFImage(URL(string: image))
+//            .placeholder({
+//                RoundedRectangle(cornerRadius: 10).fill(.gray)
+//            })
+//            .resizable()
+//            .aspectRatio(contentMode: .fill)
+//            .frame(width: 350, height: 250)
+//            .clipped()
+        
         AsyncImage(url: URL(string: image)) { image in
             image
                 .resizable()
